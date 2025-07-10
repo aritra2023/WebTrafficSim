@@ -23,10 +23,10 @@ const targetUrls = [
 
 // Configuration settings
 const config = {
-    minPageTime: 20000, // Minimum time to spend on page (20 seconds)
-    maxPageTime: 40000, // Maximum time to spend on page (40 seconds)
-    minWaitBetweenVisits: 30000, // Minimum wait between visits (30 seconds)
-    maxWaitBetweenVisits: 60000, // Maximum wait between visits (60 seconds)
+    minPageTime: 10000, // Minimum time to spend on page (10 seconds)
+    maxPageTime: 25000, // Maximum time to spend on page (25 seconds)
+    minWaitBetweenVisits: 15000, // Minimum wait between visits (15 seconds)
+    maxWaitBetweenVisits: 30000, // Maximum wait between visits (30 seconds)
     requestTimeout: 30000, // Request timeout (30 seconds)
     followRedirects: true,
     maxRedirects: 5
