@@ -42,20 +42,20 @@ app.get('/', (req, res) => {
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
-            color: #333;
+            color: #ffffff;
         }
         
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0 1rem;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.3);
         }
         
         .nav-container {
@@ -73,21 +73,46 @@ app.get('/', (req, res) => {
             gap: 16px;
         }
         
-        .logo-svg {
-            width: 48px;
-            height: 48px;
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00d4ff 0%, #5b73ff 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
         }
         
         .logo-text {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00d4ff 0%, #5b73ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: -0.5px;
         }
         
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            margin: 3px 0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
         .nav-menu {
             display: flex;
             gap: 2rem;
@@ -95,22 +120,56 @@ app.get('/', (req, res) => {
         }
         
         .nav-item {
-            color: #64748b;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.2s;
+            padding: 10px 20px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
         }
         
         .nav-item:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            border-color: rgba(0, 212, 255, 0.3);
         }
         
         .nav-item.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00d4ff 0%, #5b73ff 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 80px;
+                flex-direction: column;
+                background: rgba(0, 0, 0, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 2rem 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-item {
+                margin: 1rem 0;
+                display: block;
+                width: 80%;
+                margin: 1rem auto;
+            }
         }
         
         .container {
@@ -367,27 +426,20 @@ app.get('/', (req, res) => {
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
-                <svg class="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="48" height="48" rx="12" fill="url(#gradient)"/>
-                    <path d="M24 12L32 20H28V36H20V20H16L24 12Z" fill="white"/>
-                    <circle cx="24" cy="30" r="3" fill="url(#gradient2)"/>
-                    <defs>
-                        <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#667eea"/>
-                            <stop offset="100%" stop-color="#764ba2"/>
-                        </linearGradient>
-                        <linearGradient id="gradient2" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#ffffff"/>
-                            <stop offset="100%" stop-color="#f1f5f9"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
+                <div class="logo-icon">TH</div>
                 <div class="logo-text">TurboHits</div>
             </div>
-            <div class="nav-menu">
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-menu" id="navMenu">
                 <a href="/" class="nav-item active">Dashboard</a>
                 <a href="http://localhost:3000" class="nav-item">Analytics</a>
-                <a href="#" class="nav-item" onclick="alert('Settings coming soon!')">Settings</a>
+                <a href="#" class="nav-item" onclick="alert('Website coming soon!')">Website</a>
+                <a href="#" class="nav-item" onclick="alert('Premium features coming soon!')">Premium</a>
+                <a href="#" class="nav-item" onclick="alert('Support coming soon!')">Support</a>
             </div>
         </div>
     </nav>
@@ -586,6 +638,12 @@ app.get('/', (req, res) => {
             .then(response => response.json())
             .then(data => updateDashboard(data))
             .catch(err => console.error('Error fetching stats:', err));
+
+        // Hamburger menu toggle
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
     </script>
 </body>
 </html>
