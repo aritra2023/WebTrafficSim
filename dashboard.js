@@ -32,6 +32,8 @@ app.get('/', (req, res) => {
     <title>TurboHits - Traffic Analytics Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -39,53 +41,50 @@ app.get('/', (req, res) => {
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            color: #333;
         }
         
         .navbar {
-            background: #1e293b;
-            border-bottom: 1px solid #334155;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding: 0 2rem;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
         }
         
         .nav-container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 70px;
+            height: 80px;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
         }
         
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
+        .logo-svg {
+            width: 48px;
+            height: 48px;
         }
         
         .logo-text {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            color: #f1f5f9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: -0.5px;
         }
         
@@ -96,187 +95,271 @@ app.get('/', (req, res) => {
         }
         
         .nav-item {
-            color: #94a3b8;
+            color: #64748b;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.2s;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
         }
         
-        .nav-item:hover, .nav-item.active {
-            color: #3b82f6;
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
         
-        .page-header {
-            margin-bottom: 2rem;
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 0;
         }
         
-        .page-title {
-            font-size: 2rem;
+        .hero-title {
+            font-size: 3.5rem;
             font-weight: 700;
-            color: #f1f5f9;
-            margin-bottom: 0.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            line-height: 1.1;
         }
         
-        .page-subtitle {
-            color: #94a3b8;
-            font-size: 1.1rem;
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            border: 2px solid rgba(34, 197, 94, 0.3);
+            backdrop-filter: blur(10px);
         }
         
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: 2rem;
+            margin-bottom: 3rem;
         }
         
         .stat-card {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         
         .stat-card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-2px);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
         
         .stat-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-        
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #3b82f6;
-            font-size: 20px;
-        }
-        
-        .stat-value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: #f1f5f9;
-            margin-bottom: 0.25rem;
-        }
-        
-        .stat-label {
-            color: #94a3b8;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-        
-        .details-section {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
         
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #f1f5f9;
-            margin-bottom: 1rem;
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-value {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
         }
         
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-        }
-        
-        .data-table th,
-        .data-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #334155;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
         }
         
         .data-table th {
-            background: #0f172a;
-            color: #94a3b8;
-            font-weight: 500;
-            font-size: 0.875rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
         
         .data-table td {
-            color: #e2e8f0;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+            background: white;
         }
         
-        .data-table tr:hover {
-            background: rgba(59, 130, 246, 0.05);
+        .data-table tr:hover td {
+            background: #f8fafc;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
         }
         
         .status-indicator {
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.375rem;
-            font-size: 0.75rem;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
             font-weight: 500;
         }
         
         .status-active {
             background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
+            color: #059669;
+            border: 1px solid rgba(34, 197, 94, 0.2);
         }
         
         .status-inactive {
             background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
         
         .progress-bar {
             width: 100%;
-            height: 6px;
-            background: #334155;
-            border-radius: 3px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
             overflow: hidden;
         }
         
         .progress-fill {
             height: 100%;
-            background: #3b82f6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: width 0.3s ease;
         }
         
         .footer {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
             text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .footer-content {
-            color: #94a3b8;
-            font-size: 0.875rem;
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
         
         .footer-highlight {
-            color: #3b82f6;
-            font-weight: 500;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
         }
     </style>
 </head>
@@ -284,21 +367,39 @@ app.get('/', (req, res) => {
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
-                <div class="logo-icon">TH</div>
+                <svg class="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="12" fill="url(#gradient)"/>
+                    <path d="M24 12L32 20H28V36H20V20H16L24 12Z" fill="white"/>
+                    <circle cx="24" cy="30" r="3" fill="url(#gradient2)"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#667eea"/>
+                            <stop offset="100%" stop-color="#764ba2"/>
+                        </linearGradient>
+                        <linearGradient id="gradient2" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="#f1f5f9"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
                 <div class="logo-text">TurboHits</div>
             </div>
             <div class="nav-menu">
                 <a href="/" class="nav-item active">Dashboard</a>
                 <a href="http://localhost:3000" class="nav-item">Analytics</a>
-                <a href="#" class="nav-item">Settings</a>
+                <a href="#" class="nav-item" onclick="alert('Settings coming soon!')">Settings</a>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="page-header">
-            <h1 class="page-title">Traffic Analytics Dashboard</h1>
-            <p class="page-subtitle">Real-time monitoring of your traffic generation system</p>
+        <div class="hero-section">
+            <h1 class="hero-title">Traffic Analytics</h1>
+            <p class="hero-subtitle">Real-time monitoring and analytics for your traffic generation system</p>
+            <div class="status-badge">
+                <i class="fas fa-circle"></i>
+                System Active
+            </div>
         </div>
         
         <div class="stats-grid">
@@ -307,6 +408,9 @@ app.get('/', (req, res) => {
                     <div class="stat-icon">
                         <i class="fas fa-eye"></i>
                     </div>
+                    <button class="refresh-btn" onclick="location.reload()">
+                        <i class="fas fa-sync"></i>
+                    </button>
                 </div>
                 <div class="stat-value" id="totalVisits">0</div>
                 <div class="stat-label">Total Visits</div>
@@ -343,15 +447,17 @@ app.get('/', (req, res) => {
             </div>
         </div>
         
-        <div class="details-section">
+        <div class="content-section">
             <h2 class="section-title">
-                <i class="fas fa-globe"></i>
+                <div class="section-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
                 Target URLs Performance
             </h2>
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>URL</th>
+                        <th>Website</th>
                         <th>Visits</th>
                         <th>Success Rate</th>
                         <th>Status</th>
@@ -359,29 +465,31 @@ app.get('/', (req, res) => {
                 </thead>
                 <tbody id="urlsTable">
                     <tr>
-                        <td>digitalproductssssss.blogspot.com</td>
-                        <td>0</td>
+                        <td><strong>digitalproductssssss.blogspot.com</strong></td>
+                        <td><span id="blogVisits">0</span></td>
                         <td>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: 0%"></div>
+                                <div class="progress-fill" style="width: 100%"></div>
                             </div>
                         </td>
-                        <td><span class="status-indicator status-active">Active</span></td>
+                        <td><span class="status-indicator status-active"><i class="fas fa-circle"></i> Active</span></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         
-        <div class="details-section">
+        <div class="content-section">
             <h2 class="section-title">
-                <i class="fas fa-desktop"></i>
-                User Agents Distribution
+                <div class="section-icon">
+                    <i class="fas fa-desktop"></i>
+                </div>
+                Browser Distribution
             </h2>
             <table class="data-table">
                 <thead>
                     <tr>
                         <th>Browser</th>
-                        <th>Count</th>
+                        <th>Visits</th>
                         <th>Percentage</th>
                     </tr>
                 </thead>
@@ -405,22 +513,24 @@ app.get('/', (req, res) => {
             </table>
         </div>
         
-        <div class="details-section">
+        <div class="content-section">
             <h2 class="section-title">
-                <i class="fas fa-external-link-alt"></i>
-                Referrer Sources
+                <div class="section-icon">
+                    <i class="fas fa-external-link-alt"></i>
+                </div>
+                Traffic Sources
             </h2>
             <table class="data-table">
                 <thead>
                     <tr>
                         <th>Source</th>
                         <th>Visits</th>
-                        <th>Percentage</th>
+                        <th>Share</th>
                     </tr>
                 </thead>
                 <tbody id="referrersTable">
                     <tr>
-                        <td>Google</td>
+                        <td>Google Search</td>
                         <td>0</td>
                         <td>0%</td>
                     </tr>
@@ -430,7 +540,7 @@ app.get('/', (req, res) => {
                         <td>0%</td>
                     </tr>
                     <tr>
-                        <td>Direct</td>
+                        <td>Direct Traffic</td>
                         <td>0</td>
                         <td>0%</td>
                     </tr>
@@ -440,9 +550,9 @@ app.get('/', (req, res) => {
         
         <div class="footer">
             <div class="footer-content">
-                Last updated: <span id="lastUpdated" class="footer-highlight">Never</span> | 
-                Status: <span class="footer-highlight">ACTIVE</span> | 
-                Dashboard: <span class="footer-highlight">http://localhost:5000</span>
+                Last updated: <span id="lastUpdated" class="footer-highlight">Never</span> • 
+                Status: <span class="footer-highlight">ACTIVE</span> • 
+                Port: <span class="footer-highlight">5000</span>
             </div>
         </div>
     </div>
