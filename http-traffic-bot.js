@@ -9,16 +9,16 @@ const {
 
 // List of websites to visit - Add your target URLs here
 const targetUrls = [
-    'https://www.example.com',
+    'https://digitalproductssssss.blogspot.com/2024/01/blog-post.html',
+    'https://digitalproductssssss.blogspot.com/2024/01/blog-post.html',
+    'https://digitalproductssssss.blogspot.com/2024/01/blog-post.html',
+    'https://digitalproductssssss.blogspot.com/2024/01/blog-post.html',
+    'https://digitalproductssssss.blogspot.com/2024/01/blog-post.html',
     'https://www.google.com',
     'https://www.github.com',
     'https://www.stackoverflow.com',
     'https://www.wikipedia.org',
-    'https://www.reddit.com',
-    'https://www.youtube.com',
-    'https://www.twitter.com',
-    'https://www.facebook.com',
-    'https://www.linkedin.com'
+    'https://www.reddit.com'
 ];
 
 // Configuration settings
@@ -57,6 +57,46 @@ function log(message, type = 'INFO') {
     };
     const reset = '\x1b[0m';
     console.log(`${colors[type]}[${timestamp}] ${type}: ${message}${reset}`);
+}
+
+/**
+ * Send stats to dashboard
+ * @param {string} url - URL visited
+ * @param {string} userAgent - User agent used
+ * @param {string} referrer - Referrer used
+ * @param {boolean} success - Whether visit was successful
+ * @param {string} error - Error message if any
+ */
+function sendToDashboard(url, userAgent, referrer, success, error = null) {
+    const data = JSON.stringify({
+        url,
+        userAgent,
+        referrer,
+        success,
+        error
+    });
+    
+    const options = {
+        hostname: 'localhost',
+        port: 5000,
+        path: '/api/update',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': data.length
+        }
+    };
+    
+    const req = http.request(options, (res) => {
+        // Dashboard update sent successfully
+    });
+    
+    req.on('error', (err) => {
+        // Dashboard not available, continue without logging
+    });
+    
+    req.write(data);
+    req.end();
 }
 
 /**
@@ -181,6 +221,9 @@ async function visitUrl(url) {
         if (response.statusCode >= 200 && response.statusCode < 300) {
             log(`Successfully connected to ${url} (Status: ${response.statusCode})`, 'SUCCESS');
             
+            // Send success data to dashboard
+            sendToDashboard(url, userAgent, referrer, true);
+            
             // Simulate page interaction
             await simulatePageInteraction(url, response, userAgent);
             
@@ -199,6 +242,9 @@ async function visitUrl(url) {
         } else if (response.statusCode >= 300 && response.statusCode < 400) {
             log(`Received redirect from ${url} (Status: ${response.statusCode})`, 'WARNING');
             
+            // Send redirect data to dashboard (count as success)
+            sendToDashboard(url, userAgent, referrer, true);
+            
             // Handle redirect
             const location = response.headers.location;
             if (location) {
@@ -207,10 +253,16 @@ async function visitUrl(url) {
             }
         } else {
             log(`Received error response from ${url} (Status: ${response.statusCode})`, 'ERROR');
+            
+            // Send error data to dashboard
+            sendToDashboard(url, userAgent, referrer, false, `HTTP ${response.statusCode}`);
         }
         
     } catch (error) {
         log(`Error visiting ${url}: ${error.message}`, 'ERROR');
+        
+        // Send error data to dashboard
+        sendToDashboard(url, userAgent, referrer, false, error.message);
     }
 }
 
