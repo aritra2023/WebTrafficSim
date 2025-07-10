@@ -29,7 +29,8 @@ app.get('/', (req, res) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traffic Bot Dashboard</title>
+    <title>TurboHits - Traffic Analytics Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -38,217 +39,315 @@ app.get('/', (req, res) => {
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
             min-height: 100vh;
-            padding: 20px;
         }
         
-        .dashboard {
-            max-width: 1200px;
+        .navbar {
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
         }
         
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            padding: 30px;
-            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
         }
         
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f1f5f9;
+            letter-spacing: -0.5px;
         }
         
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1em;
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-item {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            color: #3b82f6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
         }
         
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .stat-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            transition: transform 0.3s ease;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
         }
         
         .stat-card:hover {
-            transform: translateY(-5px);
+            border-color: #3b82f6;
+            transform: translateY(-2px);
         }
         
-        .stat-card.success {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
         }
         
-        .stat-card.error {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3b82f6;
+            font-size: 20px;
         }
         
-        .stat-card.rate {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #333;
-        }
-        
-        .stat-number {
-            font-size: 3em;
-            font-weight: bold;
-            margin-bottom: 10px;
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.25rem;
         }
         
         .stat-label {
-            font-size: 1.1em;
-            opacity: 0.9;
+            color: #94a3b8;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
         
         .details-section {
-            padding: 0 30px 30px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
         .section-title {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #333;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
         .data-table th,
         .data-table td {
-            padding: 15px;
+            padding: 0.75rem;
             text-align: left;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #334155;
         }
         
         .data-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: 600;
+            background: #0f172a;
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .data-table td {
+            color: #e2e8f0;
         }
         
         .data-table tr:hover {
-            background: #f8f9ff;
+            background: rgba(59, 130, 246, 0.05);
         }
         
         .status-indicator {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
             font-weight: 500;
         }
         
-        .status-online {
-            background: #4ade80;
-            color: white;
+        .status-active {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
         }
         
-        .status-offline {
-            background: #f87171;
-            color: white;
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
         
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: #e5e7eb;
-            border-radius: 4px;
+            height: 6px;
+            background: #334155;
+            border-radius: 3px;
             overflow: hidden;
-            margin-top: 10px;
         }
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: #3b82f6;
             transition: width 0.3s ease;
         }
         
-        .last-updated {
+        .footer {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
             text-align: center;
-            color: #666;
-            font-size: 0.9em;
-            padding: 20px;
-            background: #f8f9ff;
         }
         
-        .url-highlight {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.9em;
+        .footer-content {
+            color: #94a3b8;
+            font-size: 0.875rem;
         }
         
-        .refresh-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: transform 0.3s ease;
-        }
-        
-        .refresh-btn:hover {
-            transform: translateY(-2px);
+        .footer-highlight {
+            color: #3b82f6;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <div class="header">
-            <h1>🚀 Traffic Bot Dashboard</h1>
-            <p>Real-time monitoring of your blog traffic generation</p>
-            <button class="refresh-btn" onclick="location.reload()">🔄 Refresh Data</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">TH</div>
+                <div class="logo-text">TurboHits</div>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-item active">Dashboard</a>
+                <a href="http://localhost:3000" class="nav-item">Analytics</a>
+                <a href="#" class="nav-item">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Traffic Analytics Dashboard</h1>
+            <p class="page-subtitle">Real-time monitoring of your traffic generation system</p>
         </div>
         
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number" id="totalVisits">0</div>
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="totalVisits">0</div>
                 <div class="stat-label">Total Visits</div>
             </div>
             
-            <div class="stat-card success">
-                <div class="stat-number" id="successfulVisits">0</div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="successfulVisits">0</div>
                 <div class="stat-label">Successful Visits</div>
             </div>
             
-            <div class="stat-card error">
-                <div class="stat-number" id="failedVisits">0</div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="failedVisits">0</div>
                 <div class="stat-label">Failed Visits</div>
             </div>
             
-            <div class="stat-card rate">
-                <div class="stat-number" id="successRate">0%</div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="successRate">0%</div>
                 <div class="stat-label">Success Rate</div>
             </div>
         </div>
         
         <div class="details-section">
-            <h2 class="section-title">📊 Target URLs Performance</h2>
+            <h2 class="section-title">
+                <i class="fas fa-globe"></i>
+                Target URLs Performance
+            </h2>
             <table class="data-table">
                 <thead>
                     <tr>
@@ -260,19 +359,24 @@ app.get('/', (req, res) => {
                 </thead>
                 <tbody id="urlsTable">
                     <tr>
-                        <td><span class="url-highlight">digitalproductssssss.blogspot.com</span></td>
+                        <td>digitalproductssssss.blogspot.com</td>
                         <td>0</td>
                         <td>
                             <div class="progress-bar">
                                 <div class="progress-fill" style="width: 0%"></div>
                             </div>
                         </td>
-                        <td><span class="status-indicator status-online">Active</span></td>
+                        <td><span class="status-indicator status-active">Active</span></td>
                     </tr>
                 </tbody>
             </table>
-            
-            <h2 class="section-title">🌐 User Agents Distribution</h2>
+        </div>
+        
+        <div class="details-section">
+            <h2 class="section-title">
+                <i class="fas fa-desktop"></i>
+                User Agents Distribution
+            </h2>
             <table class="data-table">
                 <thead>
                     <tr>
@@ -299,8 +403,13 @@ app.get('/', (req, res) => {
                     </tr>
                 </tbody>
             </table>
-            
-            <h2 class="section-title">📈 Referrer Sources</h2>
+        </div>
+        
+        <div class="details-section">
+            <h2 class="section-title">
+                <i class="fas fa-external-link-alt"></i>
+                Referrer Sources
+            </h2>
             <table class="data-table">
                 <thead>
                     <tr>
@@ -329,10 +438,12 @@ app.get('/', (req, res) => {
             </table>
         </div>
         
-        <div class="last-updated">
-            <p>Last updated: <span id="lastUpdated">Never</span></p>
-            <p>Dashboard URL: <strong>http://localhost:5000</strong></p>
-            <p><strong>Blog Traffic Status: ACTIVE</strong> - Views increasing successfully!</p>
+        <div class="footer">
+            <div class="footer-content">
+                Last updated: <span id="lastUpdated" class="footer-highlight">Never</span> | 
+                Status: <span class="footer-highlight">ACTIVE</span> | 
+                Dashboard: <span class="footer-highlight">http://localhost:5000</span>
+            </div>
         </div>
     </div>
 
