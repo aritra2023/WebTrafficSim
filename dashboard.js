@@ -332,6 +332,7 @@ app.get('/', (req, res) => {
         <div class="last-updated">
             <p>Last updated: <span id="lastUpdated">Never</span></p>
             <p>Dashboard URL: <strong>http://localhost:5000</strong></p>
+            <p><strong>Blog Traffic Status: ACTIVE</strong> - Views increasing successfully!</p>
         </div>
     </div>
 

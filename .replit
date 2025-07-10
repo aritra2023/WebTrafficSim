@@ -23,6 +23,10 @@ args = "Dashboard"
 task = "workflow.run"
 args = "Real Browser Bot"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Simple Stats"
+
 [[workflows.workflow]]
 name = "HTTP Traffic Bot"
 author = "agent"
@@ -47,6 +51,19 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node selenium-bot.js"
+
+[[workflows.workflow]]
+name = "Simple Stats"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node simple-stats.js"
+waitForPort = 3000
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
 
 [[ports]]
 localPort = 5000
